@@ -18,14 +18,18 @@ const Articles = () => {
       .then(resultData => {
         console.log("19 PO result, should result in update of component", resultData)
         setData(resultData);
-        
+
       })
-      .catch(error => { 
+      .catch(error => {
         console.error("24 PO setError", promiseResult)
-        setError('Error fetching data: ' + error.message)})
+        setError('Error fetching data: ' + error.message)
+      })
       .finally(() => {
-        console.log('27 PO Finally: setLoading(false)')})
-        setLoading(false);});
+        console.log('27 PO Finally: setLoading(false)')
+      })
+    setLoading(false);
+  },
+    []);
 
 
   if (loading) return <p>Loading...</p>;
