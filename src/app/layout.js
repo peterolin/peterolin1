@@ -10,9 +10,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-      <div className="container">
+      <div >
         {/* Layout UI */}
-        <section><Navbar />
+        <section className="top_level_container"><Navbar />
           {children}
           <Footer /></section>
           </div>
