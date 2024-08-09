@@ -7,8 +7,8 @@ const links = [
 
     {
         id: 2,
-        title: "Portfolio",
-        url: "/portfolio"
+        title: "Articles",
+        url: "/articles"
     }, {
         id: 3,
         title: "Blog",
