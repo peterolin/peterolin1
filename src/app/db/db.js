@@ -38,7 +38,7 @@ export async function getPool(){
 
     
 
-export async function runQuery(queryAlias){
+export async function runQuery(queryAlias, sqlParams){
     let query = mapQuery(queryAlias);
     let pool;
     let conn;
@@ -48,6 +48,8 @@ export async function runQuery(queryAlias){
     console.log("\n\nPO 30 Calling runQueryPO with " + queryAlias);
 
     console.log("PO 48 Query: " + query )
+    console.log("PO 51 params: " + sqlParams )
+
     try{
         console.log("PO 50 => getPool() "  );
         pool = await getPool();

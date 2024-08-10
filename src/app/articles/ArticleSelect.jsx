@@ -11,7 +11,7 @@ const ArticleSelect = ({ selectionMethod, changeCallback }) => {
     
     /* Runs after first render and after every update */
     React.useEffect(() => {
-        let promiseResult = runQuery("GET_ARTICLES");
+        let promiseResult = runQuery("GET_ARTICLES",[]);
         console.log("16 PO promiseResult", promiseResult);
         promiseResult
             .then(resultData => {
@@ -48,9 +48,10 @@ const ArticleSelect = ({ selectionMethod, changeCallback }) => {
 
             <select className={styles.selectStyle} onChange={changeCallback}>
                 {console.log("42 PO Render articles ", data)}
+                <option key="none" value="none">== Select an article ==</option>
 
                 {data.map(item => (
-                    <option value={item.id}><b>{item.author}</b> - <i>{item.title}</i></option>
+                    <option key={item.id} value={item.id}>{item.author} {item.title}</option>
                 ))}
                 {console.log("47 PO Articles rendered", data)};
 
