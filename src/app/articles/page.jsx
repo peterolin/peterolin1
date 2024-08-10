@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { runQuery } from "../db/db";
 import ArticleDisplay from "./ArticleDisplay";
 import MethodSelect from "./MethodSelect";
-import ArticleSelectDROPDOWN from "./ArticleSelectDropdown";
+import ArticleSelectDROPDOWN from "./ArticleSelect";
 
 
 const Articles = () => {
@@ -44,6 +44,7 @@ const Articles = () => {
     
       <ArticleSelectDROPDOWN selectionMethod={selectionMethod} changeCallback={onArticleChange}/>
 
+    <ArticleDisplay articleId={selectedArticleId}/>
        
 
     </div>
