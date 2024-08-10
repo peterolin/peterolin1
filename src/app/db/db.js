@@ -10,9 +10,10 @@ export async function getPool(){
         DB_HOST = 'localhost', // a non-sensitive default value
         DB_USER = 'foobar', // a non-sensitive default value
       } = env*/
-    /*console.log("PO connecting with: (DB_HOST, DB_USER, DB_PASS, DB_NAME)\n",
+    console.log("PO connecting with: (DB_HOST, DB_USER, DB_PASS, DB_NAME)\n",
         process.env.DB_HOST,process.env.DB_USER,
-        process.env.DB_PASS,process.env.DB_NAME);*/
+        process.env.DB_PASS,process.env.DB_NAME);
+        
     const pool = mariadb.createPool({
         host: "localhost", // env.DB_HOST,
         user: "codetest", // env.DB_USER,
