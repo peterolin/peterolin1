@@ -1,7 +1,7 @@
 "use client";
-import styles from "./articles.module.css";
-import { runQuery } from "../db/db";
 import React from 'react';
+import { runQuery } from "../db/db";
+import styles from "./articles.module.css";
 
 
 const ArticleSelect = ({ articleChanged, selectionMethod, selectionChangeCallback, dbChangeCallback }) => {

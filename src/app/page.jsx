@@ -1,7 +1,5 @@
 // `app/page.js` is the UI for the `/` URL
 import "./globals.css"
-import Link from 'next/link'
-import styles from "./app.module.css"
 
 export const metadata = {
   title: 'Next.js',

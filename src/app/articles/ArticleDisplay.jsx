@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { runQuery, deleteArticleQuery } from "../db/db";
+import { useEffect, useState } from 'react';
+import { deleteArticleQuery, runQuery } from "../db/db";
 import styles from "./articles.module.css";
 
 
@@ -94,105 +94,97 @@ const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteC
   }
 
   useEffect(() => {
-    if (deleted) {
-      return (
-        <>
-          <fieldset className={styles.fieldset} >
-            <legend className={styles.legend}>Article details</legend>
+    console.log("97 useEffect articleId: ", articleId);
+    console.log("98 deleted: ", deleted);
+    console.log("99 edited: ", edited);
 
-            <div>Article {articleId} just deleted.</div>
-          </fieldset>
-        </>
-      )
-    };
-
-    if (articleId == "none" || articleId == "") {
-      <>
-        <fieldset className={styles.fieldset} >
-          <legend className={styles.legend}>Article details</legend>
-
-          <div>No article selected</div>
-        </fieldset>
-      </>
-    } console.log("10 Calling query with ID: ", articleId);
-    getArticle(articleId);
-  }, [articleId, id, edited, articleDeleted]);
+    if (!deleted && articleId != "")
+      getArticle(articleId);
+    
+  }, [articleId, deleted]);
 
   console.log("120 inline render articleId=", articleId)
 
+  if (deleted || articleId != "") {
+    return (
+      <div>
+        <fieldset className={styles.fieldset} onChange={onChange}>
+          <legend className={styles.legend}>{deleted} ? "Deleted" : "Not selected"</legend>
+        </fieldset>
+      </div>
+    )
+  } else {
+    return (
+      <>
+        <fieldset className={styles.fieldset} onChange={onChange}>
+          <legend className={styles.legend}>Article details</legend>
+          <div className={styles.readonlyitem}>
+            <label className={styles.label} htmlFor="text_id">
+              <code>ID</code> (uneditable)
+            </label>
+            <input type="text" name="id" id="text_id" value={id} size="60" title="Unique database Key " onChange={e => setId(e.target.value)} readOnly="readOnly" />
+          </div>
 
-  return (
-    <>
+          <div className={styles.item}>
+            <label className={styles.label} htmlFor="text_author">
+              <code>AUTHOR</code>
+            </label>
+            <input type="text" name="author" id="text_author" value={author} size="60" title="Author of work" onChange={e => setAuthor(e.target.value)} />
+          </div>
 
-      <fieldset className={styles.fieldset} onChange={onChange}>
-        <legend className={styles.legend}>Article details</legend>
-        <div className={styles.readonlyitem}>
-          <label className={styles.label} htmlFor="text_id">
-            <code>ID</code> (uneditable)
-          </label>
-          <input type="text" name="id" id="text_id" value={id} size="60" title="Unique database Key " onChange={e => setId(e.target.value)} readOnly="readOnly" />
-        </div>
+          <div className={styles.item}>
+            <label className={styles.label} htmlFor="text_title">
+              <code>TITLE</code>
+            </label>
+            <input type="text" name="title" id="text_title" value={title} size="60" title="Title of work" onChange={e => setTitle(e.target.value)} />
+          </div>
 
-        <div className={styles.item}>
-          <label className={styles.label} htmlFor="text_author">
-            <code>AUTHOR</code>
-          </label>
-          <input type="text" name="author" id="text_author" value={author} size="60" title="Author of work" onChange={e => setAuthor(e.target.value)} />
-        </div>
+          <div className={styles.item}>
+            <label className={styles.label} htmlFor="text_translator">
+              <code>TRANSLATOR</code>
+            </label>
+            <input type="text" name="translator" id="text_translator" value={translator} size="60" title="Translator of the work" onChange={e => setTranslator(e.target.value)} />
+          </div>
 
-        <div className={styles.item}>
-          <label className={styles.label} htmlFor="text_title">
-            <code>TITLE</code>
-          </label>
-          <input type="text" name="title" id="text_title" value={title} size="60" title="Title of work" onChange={e => setTitle(e.target.value)} />
-        </div>
+          <div className={styles.item}>
+            <label className={styles.label} htmlFor="text_isbn">
+              <code>ISBN</code>
+            </label>
+            <input type="text" name="isbn" id="text_isbn" value={isbn} size="60" title="ISBN for work " onChange={e => setISBN(e.target.value)} />
+          </div>
 
-        <div className={styles.item}>
-          <label className={styles.label} htmlFor="text_translator">
-            <code>TRANSLATOR</code>
-          </label>
-          <input type="text" name="translator" id="text_translator" value={translator} size="60" title="Translator of the work" onChange={e => setTranslator(e.target.value)} />
-        </div>
+          <div className={styles.item}>
+            <label className={styles.label} htmlFor="text_contents">
+              <code>CONTENTS</code>
+            </label>
+            <input type="text" name="contents" id="text_contents" value={isbn} size="60" title="Contents " onChange={e => setContents(e.target.value)} />
+          </div>
 
-        <div className={styles.item}>
-          <label className={styles.label} htmlFor="text_isbn">
-            <code>ISBN</code>
-          </label>
-          <input type="text" name="isbn" id="text_isbn" value={isbn} size="60" title="ISBN for work " onChange={e => setISBN(e.target.value)} />
-        </div>
+          <div className={styles.item}>
+            <label className={styles.label} htmlFor="text_createdAt">
+              <code>CREATEDAT</code> (uneditable)
+            </label>
+            <input readOnly="readOnly" type="text" name="createdat" id="text_createdat" value={createdAt} size="60" title="Creation timestamp " onChange={e => setCreatedAt(e.target.value)} />
+          </div>
 
-        <div className={styles.item}>
-          <label className={styles.label} htmlFor="text_contents">
-            <code>CONTENTS</code>
-          </label>
-          <input type="text" name="contents" id="text_contents" value={isbn} size="60" title="Contents " onChange={e => setContents(e.target.value)} />
-        </div>
+          <div className={styles.item}>
+            <label className={styles.label} htmlFor="text_updatedAt">
+              <code>UPDATEDAT</code> (uneditable)
+            </label>
+            <input readOnly="readOnly" type="text" name="updatedat" id="text_updatedat" value={updatedAt} size="60" title="Timestamp for latest change" onChange={e => setUpdatedAt(e.target.value)} />
+          </div>
+          <div className={styles.buttonRow}>
+            <button disabled={!edited} onClick={saveArticle}>Update</button>
+            <button disabled={!edited} onClick={cancelEdit}>Cancel</button>
+            <button disabled={!Number.isInteger(id)} onClick={deleteArticle}>Delete</button></div>
 
-        <div className={styles.item}>
-          <label className={styles.label} htmlFor="text_createdAt">
-            <code>CREATEDAT</code> (uneditable)
-          </label>
-          <input readOnly="readOnly" type="text" name="createdat" id="text_createdat" value={createdAt} size="60" title="Creation timestamp " onChange={e => setCreatedAt(e.target.value)} />
-        </div>
+        </fieldset>
+      </>
 
-        <div className={styles.item}>
-          <label className={styles.label} htmlFor="text_updatedAt">
-            <code>UPDATEDAT</code> (uneditable)
-          </label>
-          <input readOnly="readOnly" type="text" name="updatedat" id="text_updatedat" value={updatedAt} size="60" title="Timestamp for latest change" onChange={e => setUpdatedAt(e.target.value)} />
-        </div>
-        <div className={styles.buttonRow}>
-          <button disabled={!edited} onClick={saveArticle}>Update</button>
-          <button disabled={!edited} onClick={cancelEdit}>Cancel</button>
-          <button disabled={!Number.isInteger(id)} onClick={deleteArticle}>Delete</button></div>
-
-      </fieldset>
-    </>
-
-  )
+    )
+  }
 }
 
 
 
-
-export default ArticleDisplay
+  export default ArticleDisplay
