@@ -5,7 +5,6 @@ import styles from "./articles.module.css";
 
 
 const ArticleSelect = ({ articleChanged, selectionMethod, selectionChangeCallback, dbChangeCallback }) => {
-    const [error, setError] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [selectedArticleId, setSelectedArticleId] = React.useState(false);
 
@@ -23,7 +22,8 @@ const ArticleSelect = ({ articleChanged, selectionMethod, selectionChangeCallbac
                 setData(resultData);
             })
             .catch(error => {
-                setError('Error fetching data: ' + error.message);
+                console.log("26", error.message)
+                
             })
             .finally(() => {
                 console.log("26 data", data);
@@ -40,7 +40,6 @@ const ArticleSelect = ({ articleChanged, selectionMethod, selectionChangeCallbac
             </div>);
 
     if (loading) return <p>Loading...</p>;
-    if (error) return <p>{error}</p>;
 
 
     { console.log("35 PO Render articles") }
@@ -53,7 +52,7 @@ const ArticleSelect = ({ articleChanged, selectionMethod, selectionChangeCallbac
                 <select className={styles.selectStyle} onChange={selectionChangeCallback}>
 
                     {console.log("42 PO Render articles ", data)}
-                    <option className={styles.art} key="none" value="none">== Select an article ==</option>
+                    <option className={styles.art} key="none" value="">== Select an article ==</option>
 
                     {data.map(item => (
                         <option className={styles.art} key={item.id} value={item.id}>{item.author} {item.title}</option>

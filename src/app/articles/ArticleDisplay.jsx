@@ -62,8 +62,8 @@ const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteC
         setUnsavedEdit(false)
       })
       .catch(error => {
-        console.error("41 updateArticle.catch PO setError", promiseResult)
-        setError('Error fetching data: ' + error.message);
+        console.error("65 ",error.message);
+        
       })
       .finally(() => {
         console.log('45 updateArticle')
@@ -91,8 +91,7 @@ const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteC
         console.log("40 click author", author);
       })
       .catch(error => {
-        console.error("41 useEffect.catch PO setError", promiseResult)
-        setError('Error fetching data: ' + error.message);
+        console.error("94 ", error.message)
       })
       .finally(() => {
         console.log('45 useEffect.finally PO Finally:')

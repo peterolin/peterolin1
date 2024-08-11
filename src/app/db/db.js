@@ -139,7 +139,7 @@ export async function deleteArticleQuery(articleId) {
 
       })
       .catch(error => {
-        setError('Error deleting data: ' + error.message);
+        console.error("142", erorr.message)
       })
       .finally(() => {
         console.log('66 finally')
