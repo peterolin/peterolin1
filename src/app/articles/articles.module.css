@@ -1,9 +1,106 @@
 .container {
-    background-color: brown;
-  }
-  
-  .selectStyles {
-    size: 22;
-    background-color: antiquewhite;
+  background-color: brown;
+}
 
-  }
+.selectStyle .art {
+  background-color: antiquewhite;
+  font-size: 2vw;
+}
+
+.legend {
+  font-size: 1vw;
+  padding: 1em;
+  position: relative;
+  color: red;
+
+}
+
+.fieldset {
+  font-size: 1vw;
+  border: 5px solid #1F497D;
+  background: #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.fieldset .legend {
+  background: #1F497D;
+  color: #fff;
+  padding: 5px 10px;
+  font-size: 2vw;
+  border-radius: 5px;
+  box-shadow: 0 0 0 5px #ddd;
+  margin-left: 20px;
+}
+
+.radioLayout {
+  flex-flow: row wrap;
+ color: black;
+}
+
+.radio .radioDiv {
+  color: black;
+}
+
+.item .readonlyitem {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 20px;
+  color: black;
+}
+
+.label {
+  display: display-inside;
+  color: gray;
+  font-size: 1vw;
+  text-transform: lowercase;
+
+  float: left;
+  padding-top: 5px;
+  text-align: left;
+  width: 8rem;
+}
+
+.buttonDiv {
+  justify-content: space-around;
+
+}
+
+
+.styledSelect {
+  overflow: hidden;
+  height: 74px;
+  float: left;
+  width: 30rem;
+  margin-right: 1em;
+  background: url(http://i50.tinypic.com/9ldb8j.png) no-repeat right center #5c5c5c;
+}
+
+.styledSelect select {
+  font-size: 3vw;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  width: 30rem;
+  overflow: hidden;
+  padding-top: 15px;
+  height: 70px;
+  text-indent: 0.25em;
+  color: #ffffff;
+  -webkit-appearance: none;
+}
+
+.styledSelect optgroup {
+  font-size: 1vw;
+}
+
+.styledSelect option.service-small {
+  font-size: 14px;
+  padding: 5px;
+  background: #5c5c5c;
+}

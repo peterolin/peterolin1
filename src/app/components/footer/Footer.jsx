@@ -4,7 +4,7 @@ import styles from "./footer.module.css";
 
 const Footer = () => {
   return (
-    <div className={styles.container}>
+    <div className={styles.footer}>
       <div>by Peter Olin for KVP IT-position</div>
       <div>Thanks to <Link href="https://www.youtube.com/@LamaDev">Lama Dev</Link> for tutorials</div>
 

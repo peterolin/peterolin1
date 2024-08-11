@@ -1,4 +1,21 @@
 
+
+/* Larger screens */
+@media (min-width: 992px) {
+  body {
+    font-size: 2vw;
+  }
+} 
+
+/* Smaller tablets and mobiles */
+@media (max-width: 768px) {
+  body {
+    font-size: 2vw;
+  }
+}
+
+
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -11,6 +28,7 @@ body {
   overflow-x: hidden;
   background-color: #111;
   color: #bbb;
+  font-size: 2vw;
 }
 
 

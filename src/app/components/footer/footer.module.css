@@ -1,8 +1,10 @@
-.container {
-  height: 50px;
+.footer {
+  font-size: 1vw;
+  
+  height: 1em;
   display: flex;
   align-items: center;
-    background-color: rgb(147, 165, 42);
   justify-content: space-between;
+  margin: 0 0 1em 0;
   }
   

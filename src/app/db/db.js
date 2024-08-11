@@ -89,23 +89,24 @@ export async function runQuery(queryAlias, sqlParams){
         console.log("PO 82 Trying conn.query(sqlQuery) ",sqlQuery,"in",Date.now()-tic,"ms.");
 
     try{
-        result = conn.query(sqlQuery, function (err,results ) {
+        result = conn.query(sqlQuery, sqlParams, function (err,results ) {
             if (err) {
                 console.error("85 Error ", err);
                 throw err;
             }
             console.log("88 Query results: ", results);
         });
-/*
+
         console.log("PO 91", res);
-        
+    
         console.log("PO 93 conn.query() success => \n", res.length, " entries.");
-*/
+
 
         conn.release();
         pool.end();
 
-        console.log("PO 96 conn.query() success => \n", result)
+        console.log("PO 108 conn.query() success")
+        
         return result;
 
     }
@@ -113,4 +114,36 @@ export async function runQuery(queryAlias, sqlParams){
         console.log("PO Error 101 conn.query() error =>",err);    
         throw err;
     }
+
+
+
+  
 }
+
+export async function deleteArticleQuery(articleId) {
+    let promiseResult = runQuery("DELETE_ARTICLE_BY_ID", [articleId]);
+    console.log("49 delete article");
+    promiseResult
+      .then(resultData => {
+        articleId = "";
+        setId("");
+        setId(null);
+        setAuthor(null);
+        setTitle(null);
+        setTranslator(null);
+        setISBN(null);
+        setCreatedAt(null);
+        setUpdatedAt(null);
+        console.log("60 deleted");
+        setEdited(false);
+
+      })
+      .catch(error => {
+        setError('Error deleting data: ' + error.message);
+      })
+      .finally(() => {
+        console.log('66 finally')
+
+      });
+  }
+
