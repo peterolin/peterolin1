@@ -5,7 +5,7 @@ import styles from "./articles.module.css";
 
 const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteCallback }) => {
 
-  const [id, setId] = useState(articleId);
+  
   const [author, setAuthor] = useState("unset");
   const [title, setTitle] = useState("");
   const [translator, setTranslator] = useState("");
@@ -14,35 +14,43 @@ const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteC
   const [createdAt, setCreatedAt] = useState("");
   const [updatedAt, setUpdatedAt] = useState("");
 
-  const [edited, setEdited] = useState(false);
-  const [deleted, setDeleted] = useState(false);
+  const [unsavedEdit, setUnsavedEdit] = useState(false);
+  //const [deleted, setDeleted] = useState(false);
 
+  // This is the worker for deleting an article 
+  // Not sure yet if this would fit better in page.jsx
+  // To manage the re-rendering of the ArticleSelect and itself
+  // it passes control to the "controller" via the dbDeleteCallback 
   const deleteArticle = (e) => {
     console.log("28 Delete article code goes here")
-    deleteArticleQuery(id);
-    setDeleted(true);
+    deleteArticleQuery(articleId);
     console.log("29 call parent/friend")
     dbDeleteCallback();
   }
 
+  // This is the worker for saving and editedd article 
+  // Not sure yet if this would fit better in page.jsx
+  // To manage the re-rendering of the ArticleSelect and itself
+  // it passes control to the "controller" via the dbChangeCallback 
+
   const saveArticle = (e) => {
     console.log("34 Save article code goes here")
-    updateArticle(author, title, translator, content, isbn, id);
-    setEdited(false);
-    dbChangeCallback(id);
+    updateArticle(author, title, translator, content, isbn, articleId);
+    setUnsavedEdit(false);
+    dbChangeCallback(articleId);
 
   }
 
   const cancelEdit = (e) => {
     console.log("39 Editing cancelled, restore code goes here. ")
 
-    setEdited(false);
+    setUnsavedEdit(false);
   }
 
 
   const onChange = (e) => {
     console.log("32 Edit detected")
-    setEdited(true);
+    setUnsavedEdit(true);
   }
 
   function updateArticle(author, title, translator, contents, isbn, id) {
@@ -51,7 +59,7 @@ const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteC
     promiseResult
       .then(resultData => {
         console.log("updated", resultData);
-        setEdited(false)
+        setUnsavedEdit(false)
       })
       .catch(error => {
         console.error("41 updateArticle.catch PO setError", promiseResult)
@@ -73,7 +81,6 @@ const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteC
         console.log("39                resultData[0]=", resultData[0]);
         let rd0 = resultData[0];
         console.log("25 in useEffect.then : rd0=", rd0)
-        setId(rd0.id);
         setAuthor(rd0.author);
         setTitle(rd0.title);
         setTranslator(rd0.translator);
@@ -95,21 +102,21 @@ const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteC
 
   useEffect(() => {
     console.log("97 useEffect articleId: ", articleId);
-    console.log("98 deleted: ", deleted);
-    console.log("99 edited: ", edited);
+    console.log("99 unsavedEdit: ", unsavedEdit);
 
-    if (!deleted && articleId != "")
+    if (!articleDeleted && articleId != "")
       getArticle(articleId);
     
-  }, [articleId, deleted]);
+  }, [articleId, articleDeleted]);
 
-  console.log("120 inline render articleId=", articleId)
+  console.log("120 inline render articleId=", articleId);
 
-  if (deleted || articleId != "") {
+  if (articleDeleted || articleId == "") {
     return (
       <div>
         <fieldset className={styles.fieldset} onChange={onChange}>
-          <legend className={styles.legend}>{deleted} ? "Deleted" : "Not selected"</legend>
+          <legend className={styles.legend}>Article details</legend>
+          <div>{articleDeleted ? "Article deleted" : "No article selected"}</div>
         </fieldset>
       </div>
     )
@@ -122,7 +129,7 @@ const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteC
             <label className={styles.label} htmlFor="text_id">
               <code>ID</code> (uneditable)
             </label>
-            <input type="text" name="id" id="text_id" value={id} size="60" title="Unique database Key " onChange={e => setId(e.target.value)} readOnly="readOnly" />
+            <input type="text" name="id" id="text_id" value={articleId} size="60" title="Unique database Key " onChange={e => {return(false)}} readOnly="readOnly" />
           </div>
 
           <div className={styles.item}>
@@ -174,9 +181,9 @@ const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteC
             <input readOnly="readOnly" type="text" name="updatedat" id="text_updatedat" value={updatedAt} size="60" title="Timestamp for latest change" onChange={e => setUpdatedAt(e.target.value)} />
           </div>
           <div className={styles.buttonRow}>
-            <button disabled={!edited} onClick={saveArticle}>Update</button>
-            <button disabled={!edited} onClick={cancelEdit}>Cancel</button>
-            <button disabled={!Number.isInteger(id)} onClick={deleteArticle}>Delete</button></div>
+            <button disabled={!unsavedEdit} onClick={saveArticle}>Update</button>
+            <button disabled={!unsavedEdit} onClick={cancelEdit}>Cancel</button>
+            <button disabled={!Number.isInteger(articleId)} onClick={deleteArticle}>Delete</button></div>
 
         </fieldset>
       </>

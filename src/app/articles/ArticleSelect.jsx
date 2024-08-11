@@ -7,40 +7,37 @@ import styles from "./articles.module.css";
 const ArticleSelect = ({ articleChanged, selectionMethod, selectionChangeCallback, dbChangeCallback }) => {
     const [error, setError] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
+    const [selectedArticleId, setSelectedArticleId] = React.useState(false);
 
     const [data, setData] = React.useState([]);
 
 
     /* Runs after first render and after every update */
     React.useEffect(() => {
-        let promiseResult = runQuery("GET_ARTICLES", [20]);
-        console.log("16 PO promiseResult", promiseResult);
+        console.log(">useEffect")
+        if (!selectionMethod) return;
+        let promiseResult = runQuery("GET_ARTICLES", [200]);
         promiseResult
             .then(resultData => {
-                console.log("data", resultData)
+                console.log("useEffect: data", resultData)
                 setData(resultData);
             })
             .catch(error => {
-                console.error("24 PO setError", promiseResult)
                 setError('Error fetching data: ' + error.message);
             })
             .finally(() => {
                 console.log("26 data", data);
             });
-    }, [articleChanged]);
+    }, [articleChanged, selectionMethod ]);
 
-    if (selectionMethod != "DROPDOWN") return (<div>
-        
-        <fieldset className={styles.fieldset} >
-                <legend className={styles.legend}>Select an article</legend>
-
-        Not yet implemented. (({selectionMethod}))
-        
-        </fieldset>
-        </div>);
-
-    console.log("33 data", data);
-    console.log("error", error);
+    if (!selectionMethod || selectionMethod != "DROPDOWN")
+        return (
+            <div>
+                <fieldset className={styles.fieldset} >
+                    <legend className={styles.legend}>Select an article</legend>
+                    Method not selected or not implemented.
+                </fieldset>
+            </div>);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
