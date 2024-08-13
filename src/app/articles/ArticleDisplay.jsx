@@ -1,31 +1,32 @@
+"use client";
 import { useEffect, useState } from 'react';
 import { deleteArticleQuery, runQuery } from "../db/db";
 import styles from "./articles.module.css";
 
 
-const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteCallback }) => {
+const ArticleDisplay = ({ articleId, dbChangeCallback, dbDeleteCallback }) => {
 
-  
   const [author, setAuthor] = useState("unset");
   const [title, setTitle] = useState("");
   const [translator, setTranslator] = useState("");
   const [isbn, setISBN] = useState("");
-  const [content, setContent] = useState("");
+  const [contents, setContents] = useState("");
   const [createdAt, setCreatedAt] = useState("");
   const [updatedAt, setUpdatedAt] = useState("");
+  const [articleDeleted, setArticleDeleted] = useState(false);
 
   const [unsavedEdit, setUnsavedEdit] = useState(false);
-  //const [deleted, setDeleted] = useState(false);
 
   // This is the worker for deleting an article 
   // Not sure yet if this would fit better in page.jsx
   // To manage the re-rendering of the ArticleSelect and itself
   // it passes control to the "controller" via the dbDeleteCallback 
   const deleteArticle = (e) => {
-    console.log("28 Delete article code goes here")
+    console.log("24 deleteArticle callback in progress. ")
     deleteArticleQuery(articleId);
     console.log("29 call parent/friend")
     dbDeleteCallback();
+    setArticleDeleted(true);
   }
 
   // This is the worker for saving and editedd article 
@@ -34,16 +35,14 @@ const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteC
   // it passes control to the "controller" via the dbChangeCallback 
 
   const saveArticle = (e) => {
-    console.log("34 Save article code goes here")
-    updateArticle(author, title, translator, content, isbn, articleId);
+    console.log("37 saveArticle worker ")
+    updateArticle(author, title, translator, contents, isbn, articleId);
     setUnsavedEdit(false);
     dbChangeCallback(articleId);
-
   }
 
   const cancelEdit = (e) => {
     console.log("39 Editing cancelled, restore code goes here. ")
-
     setUnsavedEdit(false);
   }
 
@@ -59,15 +58,13 @@ const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteC
     promiseResult
       .then(resultData => {
         console.log("updated", resultData);
-        setUnsavedEdit(false)
       })
       .catch(error => {
-        console.error("65 ",error.message);
-        
+        console.error("65 updateArticle",error.message);        
       })
       .finally(() => {
-        console.log('45 updateArticle')
-
+        console.log("68 finally - no more unsaved edits to save");
+        setUnsavedEdit(false)
       });
   }
 
@@ -103,14 +100,15 @@ const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteC
     console.log("97 useEffect articleId: ", articleId);
     console.log("99 unsavedEdit: ", unsavedEdit);
 
-    if (!articleDeleted && articleId != "")
+    if (articleId != "" && articleId != "deleted")
+      console.log("useEffect articleId: ", articleId)
       getArticle(articleId);
     
-  }, [articleId, articleDeleted]);
+  }, [articleId]);
 
   console.log("120 inline render articleId=", articleId);
 
-  if (articleDeleted || articleId == "") {
+  if (articleId == "deleted" || articleId == "") {
     return (
       <div>
         <fieldset className={styles.fieldset} onChange={onChange}>
@@ -128,62 +126,62 @@ const ArticleDisplay = ({ articleDeleted, articleId, dbChangeCallback, dbDeleteC
             <label className={styles.label} htmlFor="text_id">
               <code>ID</code> (uneditable)
             </label>
-            <input type="text" name="id" id="text_id" value={articleId} size="60" title="Unique database Key " onChange={e => {return(false)}} readOnly="readOnly" />
+            <input className={styles.readonlyitem} type="text" name="id" id="text_id" value={articleId} size="60" title="Unique database Key " onChange={e => {return(false)}} readOnly="readOnly" />
           </div>
 
-          <div className={styles.item}>
+          <div>
             <label className={styles.label} htmlFor="text_author">
               <code>AUTHOR</code>
             </label>
-            <input type="text" name="author" id="text_author" value={author} size="60" title="Author of work" onChange={e => setAuthor(e.target.value)} />
+            <input className={styles.inputItem} type="text" name="author" id="text_author" value={author} size="60" title="Author of work" onChange={e => setAuthor(e.target.value)} />
           </div>
 
-          <div className={styles.item}>
+          <div>
             <label className={styles.label} htmlFor="text_title">
               <code>TITLE</code>
             </label>
-            <input type="text" name="title" id="text_title" value={title} size="60" title="Title of work" onChange={e => setTitle(e.target.value)} />
+            <input className={styles.inputItem} type="text" name="title" id="text_title" value={title} size="60" title="Title of work" onChange={e => setTitle(e.target.value)} />
           </div>
 
-          <div className={styles.item}>
+          <div>
             <label className={styles.label} htmlFor="text_translator">
               <code>TRANSLATOR</code>
             </label>
-            <input type="text" name="translator" id="text_translator" value={translator} size="60" title="Translator of the work" onChange={e => setTranslator(e.target.value)} />
+            <input className={styles.inputItem} type="text" name="translator" id="text_translator" value={translator} size="60" title="Translator of the work" onChange={e => setTranslator(e.target.value)} />
           </div>
 
-          <div className={styles.item}>
+          <div>
             <label className={styles.label} htmlFor="text_isbn">
               <code>ISBN</code>
             </label>
-            <input type="text" name="isbn" id="text_isbn" value={isbn} size="60" title="ISBN for work " onChange={e => setISBN(e.target.value)} />
+            <input className={styles.inputItem} type="text" name="isbn" id="text_isbn" value={isbn} size="60" title="ISBN for work " onChange={e => setISBN(e.target.value)} />
           </div>
 
-          <div className={styles.item}>
+          <div>
             <label className={styles.label} htmlFor="text_contents">
               <code>CONTENTS</code>
             </label>
-            <input type="text" name="contents" id="text_contents" value={isbn} size="60" title="Contents " onChange={e => setContents(e.target.value)} />
+            <input className={styles.inputItem} type="text" name="contents" rows="2" id="text_contents" value={contents} size="60" title="Contents " onChange={e => setContents(e.target.value)} />
           </div>
 
-          <div className={styles.item}>
+          <div>
             <label className={styles.label} htmlFor="text_createdAt">
               <code>CREATEDAT</code> (uneditable)
             </label>
-            <input readOnly="readOnly" type="text" name="createdat" id="text_createdat" value={createdAt} size="60" title="Creation timestamp " onChange={e => setCreatedAt(e.target.value)} />
+            <input className={styles.readonlyitem} readOnly="readOnly" type="text" name="createdat" id="text_createdat" value={createdAt} size="60" title="Creation timestamp " onChange={e => setCreatedAt(e.target.value)} />
           </div>
 
-          <div className={styles.item}>
+          <div>
             <label className={styles.label} htmlFor="text_updatedAt">
               <code>UPDATEDAT</code> (uneditable)
             </label>
-            <input readOnly="readOnly" type="text" name="updatedat" id="text_updatedat" value={updatedAt} size="60" title="Timestamp for latest change" onChange={e => setUpdatedAt(e.target.value)} />
+            <input className={styles.readonlyitem} readOnly="readOnly" type="text" name="updatedat" id="text_updatedat" value={updatedAt} size="60" title="Timestamp for latest change" onChange={e => setUpdatedAt(e.target.value)} />
           </div>
           <div className={styles.buttonRow}>
-            <button disabled={!unsavedEdit} onClick={saveArticle}>Update</button>
-            <button disabled={!unsavedEdit} onClick={cancelEdit}>Cancel</button>
-            <button disabled={!Number.isInteger(articleId)} onClick={deleteArticle}>Delete</button></div>
-
+            <button className={styles.articleButton} disabled={!unsavedEdit} onClick={saveArticle}>Update</button>
+            <button className={styles.articleButton} disabled={!unsavedEdit} onClick={cancelEdit}>Cancel</button>
+            <button className={styles.articleButton}  onClick={deleteArticle}>Delete</button></div>
+{/* disabled={!Number.isInteger(articleId)}*/}
         </fieldset>
       </>
 

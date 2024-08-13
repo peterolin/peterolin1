@@ -45,13 +45,17 @@
   color: black;
 }
 
-.item .readonlyitem {
+.inputItem .readonlyitem {
   margin-top: 5px;
   margin-bottom: 5px;
   display: inline-block;
   vertical-align: middle;
   margin-left: 20px;
   color: black;
+  font-size: 1.5vw;
+}
+.readonlyitem {
+  background: #ddd;
 }
 
 .label {
@@ -66,10 +70,21 @@
   width: 8rem;
 }
 
-.buttonDiv {
-  justify-content: space-around;
+.buttonRow {
+    margin: 8px; 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between 2em;
+    align-items: left; 
+  }
 
-}
+  .articleButton {
+    
+    padding: 5px; 
+    font-size: 1.5vw;
+
+  }
+
 
 
 .styledSelect {

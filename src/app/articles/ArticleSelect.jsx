@@ -4,7 +4,7 @@ import { runQuery } from "../db/db";
 import styles from "./articles.module.css";
 
 
-const ArticleSelect = ({ articleChanged, selectionMethod, selectionChangeCallback, dbChangeCallback }) => {
+const ArticleSelect = ({reRenderingTrigger, selectionMethod, selectionChangeCallback}) => {
     const [loading, setLoading] = React.useState(false);
     const [selectedArticleId, setSelectedArticleId] = React.useState(false);
 
@@ -13,8 +13,9 @@ const ArticleSelect = ({ articleChanged, selectionMethod, selectionChangeCallbac
 
     /* Runs after first render and after every update */
     React.useEffect(() => {
-        console.log(">useEffect")
+        console.log("15 ArticleSelect.useEffect")
         if (!selectionMethod) return;
+        console.log("Rendering count: ", reRenderingTrigger);
         let promiseResult = runQuery("GET_ARTICLES", [200]);
         promiseResult
             .then(resultData => {
@@ -28,7 +29,7 @@ const ArticleSelect = ({ articleChanged, selectionMethod, selectionChangeCallbac
             .finally(() => {
                 console.log("26 data", data);
             });
-    }, [articleChanged, selectionMethod ]);
+    }, [reRenderingTrigger, selectionMethod ]);
 
     if (!selectionMethod || selectionMethod != "DROPDOWN")
         return (

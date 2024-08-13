@@ -3,31 +3,22 @@ import mariadb from 'mariadb';
 import { mapQuery } from './queries';
 
 
-
-
 export async function getPool(){
-    /*const {
-        DB_HOST = 'localhost', // a non-sensitive default value
-        DB_USER = 'foobar', // a non-sensitive default value
-      } = env*/
+    
+    
     console.log("PO connecting with: (DB_HOST, DB_USER, DB_PASS, DB_NAME)\n",
-        process.env.DB_HOST,process.env.DB_USER,
-        process.env.DB_PASS,process.env.DB_NAME);
-        
+        process.env.REACT_APP_DB_HOST, process.env.REACT_APP_DB_USER,
+        process.env.REACT_APP_DB_PASS, process.env.REACT_APP_DB_NAME);
+
     const pool = mariadb.createPool({
-        host: "localhost", // env.DB_HOST,
-        user: "codetest", // env.DB_USER,
-        password: "codetest2024-11", //env.DB_PASS,
-        database: "codetest", // env.DB_NAME,
+        host: process.env.REACT_APP_DB_HOST,
+        user:  process.env.REACT_APP_DB_USER,
+        password: process.env.REACT_APP_DB_PASS,
+        database:  process.env.REACT_APP_DB_NAME,
         connectionLimit: 1
         });
- /*   const pool = mariadb.createPool({
-            host: env.DB_HOST,
-            user: env.DB_USER,
-            password: env.DB_PASS,
-            database:  env.DB_NAME,
-            connectionLimit: 1
-            });*/
+
+        
     console.log("PO Connection pool: " + pool);
     console.log("PO Total connections: ", pool.totalConnections());
     console.log("PO Active connections: ", pool.activeConnections());
@@ -125,21 +116,23 @@ export async function deleteArticleQuery(articleId) {
     console.log("49 delete article");
     promiseResult
       .then(resultData => {
+        console.log("128 deleted article", articleId);
         articleId = "";
-        setId("");
         setId(null);
         setAuthor(null);
         setTitle(null);
         setTranslator(null);
         setISBN(null);
+        setContents(null);
         setCreatedAt(null);
         setUpdatedAt(null);
-        console.log("60 deleted");
+
         setEdited(false);
+        console.log("138 deleted");
 
       })
       .catch(error => {
-        console.error("142", erorr.message)
+        console.error("142 failed to delete ", articleId, error.message)
       })
       .finally(() => {
         console.log('66 finally')

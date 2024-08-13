@@ -1,9 +1,15 @@
-import React from 'react'
 import styles from "./page.module.css";
+
+
 
 const About = () => {
   return (
-    <div className={styles.container}>About </div>
+    <>
+      <title>Codetest: About</title>
+      <meta name="description" content="Code test about" />
+
+      <div className={styles.container}>About </div>
+    </>
   )
 }
 
